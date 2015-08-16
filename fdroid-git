@@ -112,10 +112,10 @@ createdirs(){
 }
 
 gendistrofile(){
-	echo "repo_url = $ORIGIN"	> "$CONFDIR/config.py"
-	echo "repo_name = $CODENAME"	>> "$CONFDIR/config.py"
-	echo "repo_icon = $REPOARCH"	>> "$CONFDIR/config.py"
-	echo "repo_description = $DESCRIPTION"	>> "$CONFDIR/config.py"
+	echo "repo_url = $ORIGIN"	> "$BASEDIR/config.py"
+	echo "repo_name = $CODENAME"	>> "$BASEDIR/config.py"
+	echo "repo_icon = $REPOARCH"	>> "$BASEDIR/config.py"
+	echo "repo_description = $DESCRIPTION"	>> "$BASEDIR/config.py"
 }
 
 includepackages(){
