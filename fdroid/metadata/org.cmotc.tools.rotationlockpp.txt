@@ -1,0 +1,8 @@
+License:Unknown
+Web Site:
+Source Code:
+Issue Tracker:
+Summary:Rotation Lock+Landscape
+Description:
+Rotation Lock+Landscape
+.
