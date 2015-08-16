@@ -30,7 +30,7 @@ DRY_RUN="NO"
 RESET="NO"
 CHECK="NO"
 
-CURDIR=pwd
+CURDIR=$(pwd)
 
 ORIGIN="user.github.io"
 CODENAME="testing"
