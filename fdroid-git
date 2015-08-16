@@ -30,12 +30,12 @@ DRY_RUN="NO"
 RESET="NO"
 CHECK="NO"
 
-CURDIR=pwd
+CURDIR=$(pwd)
 
 ORIGIN="user.github.io"
 CODENAME="testing"
 
-SRCDIR="$CURDIR/../apkpackages"
+SRCDIR="$CURDIR/packages"
 
 . "./fdroidgit.conf"
 
@@ -100,11 +100,11 @@ confirm(){
 
 checkdepends(){
 	sudo apt-get install gnupg git rng-tools fdroidserver
-	sudo service rng-tools start
+	#sudo service rng-tools start
 }
 
 createdirs(){
-	if [ -d "$CONFDIR"]; then
+	if [ -d "$CONFDIR" ]; then
 		echo "directory exists"
 	else
 		mkdir -p "$CONFDIR"
@@ -112,15 +112,16 @@ createdirs(){
 }
 
 gendistrofile(){
-	echo "repo_url = $ORIGIN"	> "$CONFDIR/config.py"
-	echo "repo_name = $CODENAME"	>> "$CONFDIR/config.py"
-	echo "repo_icon = $REPOARCH"	>> "$CONFDIR/config.py"
-	echo "repo_description = $DESCRIPTION"	>> "$CONFDIR/config.py"
+	echo "repo_url = \"$ORIGIN\""	> "$BASEDIR/config.py"
+	echo "repo_name = \"$CODENAME\""	>> "$BASEDIR/config.py"
+	echo "repo_icon = \"$ICON\""	>> "$BASEDIR/config.py"
+	echo "repo_description = \"\"\"\n$DESCRIPTION\n\"\"\""	>> "$BASEDIR/config.py"
 }
 
 includepackages(){
+	cp "$CURDIR/fdroid-icon.png" $BASEDIR
 	cd $BASEDIR
-	cp "$SRCDIR/*" ./
+	cp "$SRCDIR/"* $CONFDIR
 	fdroid update --create-metadata
 }
 
@@ -128,7 +129,9 @@ if [ "$H" = "YES" ]; then
 	echo -e $HELP
 fi
 if [ "$DRY_RUN" = "NO" ]; then
+	echo "not a dry run"
 	if [ -d "$SRCDIR" ]; then
+		echo "found source dir"
 		if [ -d "$CURDIR/.git" ]; then
 			if [ "$RESET" = "YES" ]; then
 				CHECK="YES"
@@ -137,9 +140,7 @@ if [ "$DRY_RUN" = "NO" ]; then
 			if [ "$CHECK" = "YES" ]; then
 				checkdepends
 			fi
-			if [ "$RESET" = "YES" ]; then
-				createdirs
-			fi
+			createdirs
 			cd $CONFDIR
 			gendistrofile
 			includepackages
