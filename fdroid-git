@@ -100,7 +100,7 @@ confirm(){
 
 checkdepends(){
 	sudo apt-get install gnupg git rng-tools fdroidserver
-	sudo service rng-tools start
+	#sudo service rng-tools start
 }
 
 createdirs(){
@@ -114,7 +114,7 @@ createdirs(){
 gendistrofile(){
 	echo "repo_url = $ORIGIN"	> "$BASEDIR/config.py"
 	echo "repo_name = $CODENAME"	>> "$BASEDIR/config.py"
-	echo "repo_icon = $REPOARCH"	>> "$BASEDIR/config.py"
+#	echo "repo_icon = $REPOARCH"	>> "$BASEDIR/config.py"
 	echo "repo_description = $DESCRIPTION"	>> "$BASEDIR/config.py"
 }
 
