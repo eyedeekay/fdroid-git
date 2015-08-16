@@ -119,7 +119,7 @@ gendistrofile(){
 }
 
 includepackages(){
-	cp fdroid-icon.png $BASEDIR
+	cp "$CURDIR/fdroid-icon.png" $BASEDIR
 	cd $BASEDIR
 	cp "$SRCDIR/*.apk" ./
 	fdroid update --create-metadata
