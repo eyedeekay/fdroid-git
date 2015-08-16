@@ -35,7 +35,7 @@ CURDIR=pwd
 ORIGIN="user.github.io"
 CODENAME="testing"
 
-SRCDIR="$CURDIR/../apkpackages"
+SRCDIR="$CURDIR/packages"
 
 . "./fdroidgit.conf"
 
@@ -128,7 +128,9 @@ if [ "$H" = "YES" ]; then
 	echo -e $HELP
 fi
 if [ "$DRY_RUN" = "NO" ]; then
+	echo "not a dry run"
 	if [ -d "$SRCDIR" ]; then
+		echo "found source dir"
 		if [ -d "$CURDIR/.git" ]; then
 			if [ "$RESET" = "YES" ]; then
 				CHECK="YES"
@@ -137,9 +139,7 @@ if [ "$DRY_RUN" = "NO" ]; then
 			if [ "$CHECK" = "YES" ]; then
 				checkdepends
 			fi
-			if [ "$RESET" = "YES" ]; then
-				createdirs
-			fi
+			createdirs
 			cd $CONFDIR
 			gendistrofile
 			includepackages
