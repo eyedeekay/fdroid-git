@@ -104,7 +104,7 @@ checkdepends(){
 }
 
 createdirs(){
-	if [ -d "$CONFDIR"]; then
+	if [ -d "$CONFDIR" ]; then
 		echo "directory exists"
 	else
 		mkdir -p "$CONFDIR"
