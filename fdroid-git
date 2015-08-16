@@ -115,7 +115,7 @@ gendistrofile(){
 	echo "repo_url = \"$ORIGIN\""	> "$BASEDIR/config.py"
 	echo "repo_name = \"$CODENAME\""	>> "$BASEDIR/config.py"
 #	echo "repo_icon = $ICON"	>> "$BASEDIR/config.py"
-	echo -e "repo_description = \"\"\"\n$DESCRIPTION\n\"\"\""	>> "$BASEDIR/config.py"
+	echo "repo_description = \"\"\"\n$DESCRIPTION\n\"\"\""	>> "$BASEDIR/config.py"
 }
 
 includepackages(){
