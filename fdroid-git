@@ -120,7 +120,7 @@ gendistrofile(){
 
 includepackages(){
 	cd $BASEDIR
-	cp "$SRCDIR/*" ./
+	cp "$SRCDIR/*.apk" ./
 	fdroid update --create-metadata
 }
 
