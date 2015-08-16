@@ -1,0 +1,6 @@
+#! /bin/sh
+#CURDIR
+ORIGIN="cmotc.github.io"
+CODENAME="testing"
+DESCRIPTION="override.testing"
+DRY_RUN="YES"

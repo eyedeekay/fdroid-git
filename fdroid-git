@@ -11,15 +11,9 @@ github pages for download. \n
 \t\t		URL of the repository\n
 \t	-c \ --codename\n
 \t\t		Codename you want to use, defaults is \"testing\"\n
-\t	-a \ --arch\n
-\t\t		Architecture you want to host, defaults to \"all\"\n
-\t	-p \ --policy\n
-\t\t		Policy of packages you want to host, defaults to \"main\"\n
-\t	-k \ --key\n
-\t\t		ID of the package signing key\n
 \t	-s \ --sources\n
 \t\t		Folder with the packages to include in the repo\n
-\t	-q \ --override\n
+\t	-t \ --description\n
 \t\t		Name of the override file\n
 \t	-m \ --message\n
 \t\t		Message to include in the commit\n
@@ -32,7 +26,7 @@ github pages for download. \n
 \t	-h \ --help\n
 \t\t		Display this help message\n
 "
-DRY_RUN="YES"
+DRY_RUN="NO"
 RESET="NO"
 CHECK="NO"
 
@@ -40,14 +34,10 @@ CURDIR=pwd
 
 ORIGIN="user.github.io"
 CODENAME="testing"
-REPOARCH="all"
-POLICY="main"
-KEY="Example"
-OVERRIDE="override.testing"
 
-SRCDIR="$CURDIR/../debpackages"
+SRCDIR="$CURDIR/../apkpackages"
 
-. "./aptgit.conf"
+. "./fdroidgit.conf"
 
 while [ "$#" -gt 0 ]; do
 	arg="$1"
@@ -64,24 +54,12 @@ while [ "$#" -gt 0 ]; do
 			CODENAME="$2"
 			shift
 		;;
-		-a|--arch)
-			REPOARCH="$2"
-			shift
-		;;
-		-p|--policy)
-			POLICY="$2"
-			shift
-		;;
-		-k|--key)
-			KEY="$2"
-			shift
-		;;
 		-s|--sources)
 			SRCDIR="$2"
 			shift
 		;;
-		-q|--override)
-			OVERRIDE="$2"
+		-t|--description)
+			DESCRIPTION="$2"
 			shift
 		;;
 		-m,|--message)
@@ -104,8 +82,8 @@ while [ "$#" -gt 0 ]; do
 	shift
 done
 
-BASEDIR="$CURDIR/debian"
-CONFDIR="$CURDIR/debian/conf"
+BASEDIR="$CURDIR/fdroid"
+CONFDIR="$CURDIR/fdroid/repo"
 
 confirm(){
 	read -r -p "${1: -Are you sure? [y/N]} " response
@@ -121,20 +99,8 @@ confirm(){
 }
 
 checkdepends(){
-	sudo apt-get install gnupg git rng-tools dpkg-sig reprepo
+	sudo apt-get install gnupg git rng-tools fdroidserver
 	sudo service rng-tools start
-}
-
-generatekey(){
-	gpg --gen-key
-}
-
-enterkey(){
-	KEYED="NO"
-	while [ "$KEYED"="NO" ]; do
-		read -r -p "Enter the key that you want to use to sign your repository" KEY
-		KEYED=confirm
-	done
 }
 
 createdirs(){
@@ -146,31 +112,16 @@ createdirs(){
 }
 
 gendistrofile(){
-	echo "Origin: $ORIGIN"		> "$CONFDIR/distributions"
-	echo "Label: $ORIGIN"		>> "$CONFDIR/distributions"
-	echo "Codename: $CODENAME"	>> "$CONFDIR/distributions"
-	echo "Architectures: $REPOARCH"	>> "$CONFDIR/distributions"
-	echo "Components: $POLICY"	>> "$CONFDIR/distributions"
-	echo "Description: $ORIGIN"	>> "$CONFDIR/distributions"
-	echo "SignWith: $KEY"		>> "$CONFDIR/distributions"
-	echo "DebOverride: $OVERRIDE"	>> "$CONFDIR/distributions"
-	echo "DscOverride: $OVERRIDE"	>> "$CONFDIR/distributions"
-	touch "$CONFDIR/$OVERRIDE"
-}
-
-genconfoptions(){
-	echo "verbose"
-	echo "ask-passphrase"
-	echo "basedir $BASEDIR"
-}
-
-generaterkey(){
-	gpg --armor --output "$CURDIR/$ORIGIN.gpg.key" --export $KEY
+	echo "repo_url = $ORIGIN"	> "$CONFDIR/config.py"
+	echo "repo_name = $CODENAME"	>> "$CONFDIR/config.py"
+	echo "repo_icon = $REPOARCH"	>> "$CONFDIR/config.py"
+	echo "repo_description = $DESCRIPTION"	>> "$CONFDIR/config.py"
 }
 
 includepackages(){
 	cd $BASEDIR
-	reprepo include "$SRCDIR/*"
+	cp "$SRCDIR/*" ./
+	fdroid update --create-metadata
 }
 
 if [ "$H" = "YES" ]; then
@@ -187,13 +138,10 @@ if [ "$DRY_RUN" = "NO" ]; then
 				checkdepends
 			fi
 			if [ "$RESET" = "YES" ]; then
-				generatekey
-				enterkey
 				createdirs
 			fi
+			cd $CONFDIR
 			gendistrofile
-			genconfoptions
-			generaterkey
 			includepackages
 			DATE=date
 			if [ "$ORG" = "YES" ]; then
