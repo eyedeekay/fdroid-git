@@ -104,7 +104,7 @@ checkdepends(){
 }
 
 createdirs(){
-	if ["$CONFDIR" -d]; then
+	if [ -d "$CONFDIR"]; then
 		echo "directory exists"
 	else
 		mkdir -p "$CONFDIR"
@@ -128,8 +128,8 @@ if [ "$H" = "YES" ]; then
 	echo -e $HELP
 fi
 if [ "$DRY_RUN" = "NO" ]; then
-	if [ "$SRCDIR" -d ]; then
-		if [ "$CURDIR/.git" -d ]; then
+	if [ -d "$SRCDIR" ]; then
+		if [ -d "$CURDIR/.git" ]; then
 			if [ "$RESET" = "YES" ]; then
 				CHECK="YES"
 				rm -rf "$BASEDIR"
