@@ -107,6 +107,7 @@ createdirs(){
 	if [ -d "$CONFDIR" ]; then
 		echo "directory exists"
 	else
+		fdroid init
 		mkdir -p "$CONFDIR"
 	fi
 }
