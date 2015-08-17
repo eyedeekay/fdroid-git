@@ -125,6 +125,7 @@ includepackages(){
 	cd $BASEDIR
 	cp "$SRCDIR/"* $CONFDIR
 	fdroid update --create-metadata
+	fdroid update
 }
 
 if [ "$H" = "YES" ]; then
