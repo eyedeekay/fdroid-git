@@ -145,7 +145,7 @@ if [ "$DRY_RUN" = "NO" ]; then
 			cd $CONFDIR
 			gendistrofile
 			includepackages
-			DATE=date
+			DATE=$(date)
 			if [ "$ORG" = "YES" ]; then
 				git add . && git commit -am "Repository update: $MESSAGE $DATE" && git push origin master
 			else

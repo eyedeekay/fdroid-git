@@ -25,4 +25,4 @@ github pages for download.
         -u \ --user \ --org \ --organization
                 Us as user/organization page, post page to master branch
         -h \ --help
-                Display this help message        
+                Display this help message
